@@ -1,0 +1,56 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+header{
+    height: 200px;
+    background-image: url(/images/pattern-bg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header__input_button{
+    height: 100%;
+    display: flex;
+}
+
+.input__search_container{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#header__title{
+    font-size: 22px;
+    color: $White;
+    font-family: $font-rubik;
+    font-weight: 400;
+    text-align: center;
+}
+
+#search{
+    width: 100%;
+    font-size: 18px;
+    height: 2em;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border: none;
+    padding-left: 1em;
+    outline: none;
+}
+
+#search_submit{
+    background-color: black;
+    border: none;
+    color: $White;
+    font-family: $font-rubik;
+    font-weight: 400;
+    width: 3em;
+    border-top-right-radius:10px ;
+    border-bottom-right-radius: 10px;
+}

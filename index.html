@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- displays site properly based on user's device -->
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon-32x32.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;1,700&family=Rubik:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style/style.css" />
+
+    <title>Frontend Mentor | IP Address Tracker</title>
+
+    </style>
+  </head>
+  <body>
+    <header>
+        <div class="input__search_container">
+          <div id="header__title">IP Address Tracker</div>
+          <div class="header__input_button">
+            <input id="search" name="search"type="text" placeholder="Search for any IP address or domain">
+            <button id="search_submit" type="submit">></button>
+          </div>
+        </div>
+    </header>
+
+    <main>
+      <div class="results__container">
+        <div id="result__ip_adress">IP Address</div>
+        <div id="result__location">Location</div>
+        <div id="result__timezone">
+          Timezone UTC
+          <!-- add offset value dynamically using the API -->
+        </div>
+        <div>ISP</div>
+      </div>
+    </main>
+
+    <!-- might use later -->
+    <!-- <iframe src="https://www.w3schools.com/html/html_iframe.asp" frameborder="0" height="200"width="300"></iframe> -->
+  </body>
+</html>
