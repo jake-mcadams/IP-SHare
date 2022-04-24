@@ -35,18 +35,48 @@
     </header>
 
     <main>
-      <div class="results__container">
-        <div id="result__ip_adress">IP Address</div>
-        <div id="result__location">Location</div>
-        <div id="result__timezone">
-          Timezone UTC
-          <!-- add offset value dynamically using the API -->
+      <div class="response__container">
+        <div id="response__item_container">
+          <div id="result__ip_adress" class="result_container">
+            <div class="result_title">
+              IP Address
+            </div>
+            <div id="ip_result" class="result_value">
+              192.212.174.101
+            </div>
+          </div>
+          <div id="result__location" class="result_container">
+            <div class="result_title">
+              Location
+            </div>
+            <div id="location_result" class="result_value">
+              Brooklyn, NY 100011212
+            </div>
+          </div>
+          <div id="result__timezone" class="result_container">
+            <div class="result_title">
+              Timezone
+            </div>
+            <div id="timezone_result" class="result_value">
+              UTC -05:00
+            </div>
+            <!-- add offset value dynamically using the API -->
+          </div>
+          <div id="result__ISP" class="result_container">
+            <div class="result_title">
+              ISP
+            </div>
+            <div class="result_value" id="ISP_result">
+              SpaceX Starlink
+            </div>
+          </div>
         </div>
-        <div>ISP</div>
       </div>
     </main>
 
     <!-- might use later -->
     <!-- <iframe src="https://www.w3schools.com/html/html_iframe.asp" frameborder="0" height="200"width="300"></iframe> -->
+
+    <script src="index.js"></script>
   </body>
 </html>
