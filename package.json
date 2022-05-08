@@ -4,8 +4,8 @@
   "description": "![Design preview for the IP address tracker coding challenge](./design/desktop-preview.jpg)",
   "main": "index.js",
   "scripts": {
-    "startDev": "nodemon server.js",
-    "startType": "npx tsc --watch"
+    "start:dev": "nodemon server.js",
+    "start:type": "npx tsc --watch"
   },
   "repository": {
     "type": "git",
