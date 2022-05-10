@@ -2,9 +2,9 @@
   "name": "ip-address-tracker-master",
   "version": "1.0.0",
   "description": "![Design preview for the IP address tracker coding challenge](./design/desktop-preview.jpg)",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start:dev": "nodemon server.js",
+    "start:dev": "nodemon ./dist/API/server.js",
     "start:type": "npx tsc --watch"
   },
   "repository": {
@@ -20,6 +20,11 @@
   "devDependencies": {
     "@types/leaflet": "^1.7.9",
     "leaflet": "^1.8.0",
-    "typescript": "^4.6.3"
-  }
+    "typescript": "^4.6.4"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.31"
+  },
+  "type": "module"
 }
