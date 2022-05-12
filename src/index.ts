@@ -4,7 +4,7 @@
 let searchValue = document.getElementById("search") as HTMLInputElement;
 const searchForm = document.getElementById("search_form") as HTMLFormElement;
 
-let browserRDO:any;
+let browserRDO: any;
 
 let myLocation: {
   ip: string;
@@ -51,36 +51,33 @@ const getCordinates = (): any => {
       return response.json();
     })
     .then((data) => {
-      console.log(data)
+      console.log(data);
     });
 };
 
-searchForm.addEventListener("submit", (e) => {
-  
-  e.preventDefault();
-  let rdoLat:any;
-  let rdoLng: any;
-  // console.log(getCordinates());
-  getCordinates();
-  navigator.geolocation.getCurrentPosition(getBrowserLocation);
-  updateLocation(34.06635, -84.67837, 15);
-  console.log(browserRDO);
-});
-
-const getBrowserLocation = (position:any) =>{
-  // console.log(position.coords.latitude)
-  // console.log(position.coords.longitude)
-  console.log(position.coords)
-  browserRDO = position.coords;
-  return browserRDO;
-  
-}
+const getBrowserLocation = () => {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        let coordinates = {
+          newLat: `${position.coords.latitude}`,
+          newLng: `${position.coords.longitude}`,
+        };
+        resolve(coordinates);
+      },
+      (error) => reject(error),
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
+    );
+  });
+};
 
 // creating map layer
 
 // const generateMap = (x: number = 0, y: number = 0, z: number = 1): any => {
+const generateMap = (x: number = 0, y: number = 0, z: number = 1) => {
+  //generate default map
   const map = L.map("map").setView([0, 0], 1);
-  
+
   const attribution =
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
@@ -90,14 +87,32 @@ const getBrowserLocation = (position:any) =>{
 
   const marker = L.marker([myLocation.lat, myLocation.lng]).addTo(map);
 
-// };
+  // };
 
-const updateLocation = (x:number, y:number, z:number) =>{
-  map.setView([x, y], z);
-  marker.setLatLng([x, y]);
-}
-
-
+  return {
+    updateLocation: (x: number, y: number, z: number) => {
+      map.setView([x, y], z);
+      marker.setLatLng([x, y]);
+    },
+  };
+};
 
 //Generating default view
-// generateMap();
+let myMap = generateMap();
+searchForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  // getBrowserLocation().then((res:any)=>{
+  //   console.log(`${res.newLat}, ${res.newLng}`)
+  //   myMap.updateLocation(res.newLat, res.newLng, 8)
+  // })
+  const testing = async () => {
+    const response: any = await getBrowserLocation();
+    console.log('waiting for response')
+    console.log(`got response: ${response}`)
+    myMap.updateLocation(response.newLat, response.newLng, 8);
+    console.log('updated map')
+  };
+  testing()
+  // myMap.updateLocation(34.06635, -84.67837, 15);
+});
