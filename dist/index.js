@@ -1,6 +1,6 @@
 "use strict";
-// import { marker } from "leaflet";
-// import * as L from "leaflet";
+// import L from "leaflet";
+// import { getCordinates } from "./modules/Apifetch";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -12,7 +12,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 let searchValue = document.getElementById("search");
 const searchForm = document.getElementById("search_form");
-let browserRDO;
 let myLocation = {
     ip: "73.106.192.3",
     isp: "Comcast",
@@ -22,33 +21,49 @@ let myLocation = {
     lng: -84.67837,
 };
 // Get IP address co-ordinates
-const getCordinates = () => {
-    let rdo_ip;
+// const getCordinates = (): any => {
+//   let rdo_ip: string;
+//   const myHeaders = new Headers({
+//     "Content-Type": "application/json",
+//   });
+//   const myRequest = new Request("http://localhost:3000/dbTest", {
+//     method: "POST",
+//     headers: myHeaders,
+//     mode: "cors",
+//     cache: "default",
+//   });
+//     fetch(myRequest, {
+//       body: JSON.stringify({
+//         ip: searchValue.value,
+//       }),
+//     })
+//       .then((response) => {
+//         if (!response.ok) {
+//           throw new Error("Network response was not ok");
+//         }
+//         return response.json();
+//       })
+//       .then((data) => {
+//         console.log(data);
+//       });
+// };
+const getCordinates = () => __awaiter(void 0, void 0, void 0, function* () {
     const myHeaders = new Headers({
         "Content-Type": "application/json",
     });
-    let testURL = `http://localhost:3000/dbTest`;
     const myRequest = new Request("http://localhost:3000/dbTest", {
         method: "POST",
         headers: myHeaders,
         mode: "cors",
         cache: "default",
     });
-    fetch(myRequest, {
+    const response = yield fetch(myRequest, {
         body: JSON.stringify({
             ip: searchValue.value,
-        }),
-    })
-        .then((response) => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        return response.json();
-    })
-        .then((data) => {
-        console.log(data);
+        })
     });
-};
+    return response.json();
+});
 const getBrowserLocation = () => {
     return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -80,19 +95,16 @@ const generateMap = (x = 0, y = 0, z = 1) => {
 };
 //Generating default view
 let myMap = generateMap();
+// Search form submit and lookup call
 searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    // getBrowserLocation().then((res:any)=>{
-    //   console.log(`${res.newLat}, ${res.newLng}`)
-    //   myMap.updateLocation(res.newLat, res.newLng, 8)
-    // })
-    const testing = () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield getBrowserLocation();
-        console.log('waiting for response');
-        console.log(`got response: ${response}`);
-        myMap.updateLocation(response.newLat, response.newLng, 8);
-        console.log('updated map');
+    getCordinates().then((data) => {
+        console.log(data);
+        myMap.updateLocation(data.newLat, data.newLng, 8);
     });
-    testing();
-    // myMap.updateLocation(34.06635, -84.67837, 15);
+    // const browserUpdate = async () => {
+    //   const response: any = await getBrowserLocation();
+    //   myMap.updateLocation(response.newLat, response.newLng, 8);
+    // };
+    // browserUpdate();
 });
