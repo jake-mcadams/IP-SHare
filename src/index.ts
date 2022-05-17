@@ -22,54 +22,33 @@ let myLocation: {
 
 // Get IP address co-ordinates
 
-// const getCordinates = (): any => {
-//   let rdo_ip: string;
-//   const myHeaders = new Headers({
-//     "Content-Type": "application/json",
-//   });
-
-
-//   const myRequest = new Request("http://localhost:3000/dbTest", {
-//     method: "POST",
-//     headers: myHeaders,
-//     mode: "cors",
-//     cache: "default",
-//   });
-
-
-//     fetch(myRequest, {
-//       body: JSON.stringify({
-//         ip: searchValue.value,
-//       }),
-//     })
-//       .then((response) => {
-//         if (!response.ok) {
-//           throw new Error("Network response was not ok");
-//         }
-//         return response.json();
-//       })
-//       .then((data) => {
-//         console.log(data);
-//       });
-// };
-
-const getCordinates = async()=>{
-    const myHeaders = new Headers({
+const getCordinates = (): any => {
+  const myHeaders = new Headers({
     "Content-Type": "application/json",
   });
-    const myRequest = new Request("http://localhost:3000/dbTest", {
+
+  const myRequest = new Request("http://localhost:3000/apiLookup", {
     method: "POST",
     headers: myHeaders,
     mode: "cors",
     cache: "default",
   });
-  const response = await fetch(myRequest, {
+
+  return fetch(myRequest, {
     body: JSON.stringify({
       ip: searchValue.value,
-    })
-  });
-  return response.json()
-}
+    }),
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  })
+  // .then((data)=>{
+  //   return data
+  // })
+};
 
 const getBrowserLocation = () => {
   return new Promise((resolve, reject) => {
@@ -119,13 +98,18 @@ let myMap = generateMap();
 // Search form submit and lookup call
 searchForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  getCordinates().then((data)=>{
+  getCordinates().then((data:any)=>{
     console.log(data)
-    myMap.updateLocation(data.newLat, data.newLng, 8);
+    // myMap.updateLocation(data.newLat, data.newLng, 8);
   })
   // const browserUpdate = async () => {
   //   const response: any = await getBrowserLocation();
-  //   myMap.updateLocation(response.newLat, response.newLng, 8);
+  //   console.log(response)
+  //   // myMap.updateLocation(response.newLat, response.newLng, 8);
   // };
   // browserUpdate();
+  const findCoordinates = async () => {
+    const result = await getCordinates();
+  };
+  findCoordinates();
 });
