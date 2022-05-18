@@ -33,7 +33,7 @@ const getCordinates = () => {
     });
     return fetch(myRequest, {
         body: JSON.stringify({
-            ip: searchValue.value,
+            search: searchValue.value,
         }),
     })
         .then((response) => {
@@ -81,15 +81,9 @@ let myMap = generateMap();
 searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
     getCordinates().then((data) => {
-        console.log(data);
-        // myMap.updateLocation(data.newLat, data.newLng, 8);
+        // console.log(`Lat: ${data.latitude} Lng: ${data.longitude}`)
+        myMap.updateLocation(data.latitude, data.longitude, 8);
     });
-    // const browserUpdate = async () => {
-    //   const response: any = await getBrowserLocation();
-    //   console.log(response)
-    //   // myMap.updateLocation(response.newLat, response.newLng, 8);
-    // };
-    // browserUpdate();
     const findCoordinates = () => __awaiter(void 0, void 0, void 0, function* () {
         const result = yield getCordinates();
     });
