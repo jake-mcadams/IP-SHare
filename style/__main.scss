@@ -1,11 +1,13 @@
 @import "__results";
 
 main{
+    height: 100%;
     position: relative;
 }
 
 #map{
-    height: 500px;
+    // height: 500px;
+    height: 800px;
     z-index: -1;
     
 }

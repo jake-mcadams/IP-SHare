@@ -35,8 +35,9 @@
         <div class="input__search_container">
           <div id="header__title">IP Address Tracker</div>
           <form class="header__input_button" id="search_form">
-            <input id="search" name="search"type="text" placeholder="Search for any IP address or domain" autocomplete="off">
+            <input id="search" name="search"type="text" placeholder="Search for any IP address or domain" autocomplete="off" required>
             <button id="search_submit" type="submit">></button>
+            <button id="myLocation">Search my Location</button>
           </form>
         </div>
     </header>
@@ -49,7 +50,7 @@
               IP Address
             </div>
             <div id="ip_result" class="result_value">
-              192.212.174.101
+              <!-- 192.212.174.101 -->
             </div>
           </div>
           <div id="result__location" class="result_container">
@@ -57,7 +58,7 @@
               Location
             </div>
             <div id="location_result" class="result_value">
-              Brooklyn, NY 100011212
+              <!-- Brooklyn, NY 100011212 -->
             </div>
           </div>
           <div id="result__timezone" class="result_container">
@@ -65,7 +66,7 @@
               Timezone
             </div>
             <div id="timezone_result" class="result_value">
-              UTC -05:00
+              <!-- UTC -05:00 -->
             </div>
             <!-- add offset value dynamically using the API -->
           </div>
@@ -74,7 +75,7 @@
               ISP
             </div>
             <div class="result_value" id="ISP_result">
-              SpaceX Starlink
+              <!-- SpaceX Starlink -->
             </div>
           </div>
         </div>

@@ -1,23 +1,25 @@
-// import L from "leaflet";
-// import { getCordinates } from "./modules/Apifetch";
-
-let searchValue = document.getElementById("search") as HTMLInputElement;
+const searchValue = document.getElementById("search") as HTMLInputElement;
 const searchForm = document.getElementById("search_form") as HTMLFormElement;
+let resIP = document.getElementById("ip_result") as HTMLElement;
+let resLocation = document.getElementById("location_result") as HTMLElement;
+let resTZ = document.getElementById("timezone_result") as HTMLElement;
+let resISP = document.getElementById("ISP_result") as HTMLElement;
 
-let myLocation: {
-  ip: string;
-  isp: string;
-  location: string;
-  timezone: string;
-  lat: number;
-  lng: number;
-} = {
-  ip: "73.106.192.3",
-  isp: "Comcast",
-  location: "Acworth" + "GA" + "30101",
-  timezone: "-04:00",
-  lat: 34.06635,
-  lng: -84.67837,
+//on load set the initial location to the browswers
+const getBrowserLocation = () => {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        let coordinates = {
+          newLat: `${position.coords.latitude}`,
+          newLng: `${position.coords.longitude}`,
+        };
+        resolve(coordinates);
+      },
+      (error) => reject(error),
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
+    );
+  });
 };
 
 // Get IP address co-ordinates
@@ -38,40 +40,19 @@ const getCordinates = (): any => {
     body: JSON.stringify({
       search: searchValue.value,
     }),
-  })
-  .then((response) => {
+  }).then((response) => {
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
     return response.json();
-  })
-  // .then((data)=>{
-  //   return data
-  // })
-};
-
-const getBrowserLocation = () => {
-  return new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        let coordinates = {
-          newLat: `${position.coords.latitude}`,
-          newLng: `${position.coords.longitude}`,
-        };
-        resolve(coordinates);
-      },
-      (error) => reject(error),
-      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
-    );
   });
 };
 
 // creating map layer
 
-// const generateMap = (x: number = 0, y: number = 0, z: number = 1): any => {
 const generateMap = (x: number = 0, y: number = 0, z: number = 1) => {
   //generate default map
-  const map = L.map("map").setView([0, 0], 1);
+  const map = L.map("map", { zoomControl: false }).setView([x, y], z);
 
   const attribution =
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
@@ -79,17 +60,78 @@ const generateMap = (x: number = 0, y: number = 0, z: number = 1) => {
   const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   const tiles = L.tileLayer(tileUrl, { attribution });
   tiles.addTo(map);
-
-  const marker = L.marker([myLocation.lat, myLocation.lng]).addTo(map);
-
-  // };
-
+  //calling broswer location
+  getBrowserLocation()
+  .then((data)=>{
+    console.log(`line 66: ${data}`)
+  })
+  // let marker = L.marker([x, y]).addTo(map);
   return {
     updateLocation: (x: number, y: number, z: number) => {
+      let marker = L.marker([x, y]).addTo(map);
       map.setView([x, y], z);
+      if (typeof marker == "undefined") {
+        let marker = L.marker([x, y]).addTo(map);
+      }
+      console.log(`${x} and ${y}`);
       marker.setLatLng([x, y]);
     },
   };
+};
+
+//On error reset and dispaly error
+
+const returnedErrorReset = (errType: any) => {
+  const errIPLKUP: string = "Unable to find Location Please try again...";
+  const errDNSLKUP: string = "Invalid Domain Name";
+  const emptySearch: string = "No search parameter provdied...";
+  switch (errType) {
+    case "ipErr":
+      searchValue.setAttribute("placeholder", errIPLKUP);
+      break;
+    case "dnsErr":
+      searchValue.setAttribute("placeholder", errDNSLKUP);
+      break;
+    case "empty":
+      searchValue.setAttribute("placeholder", emptySearch);
+      break;
+  }
+  searchValue.value = "";
+  searchValue.classList.add("returned_error");
+};
+
+//Update results
+
+const updateResults = (dto: any) => {
+  resIP.innerText = dto.ip;
+  dto.region != null
+    ? (resLocation.innerText = dto.region)
+    : (resLocation.innerText = "Not found.");
+  dto.timezone != null
+    ? (resTZ.innerText = dto.timezone)
+    : (resTZ.innerText = "Not found.");
+  dto.organization_name != null
+    ? (resISP.innerText = dto.organization_name)
+    : (resISP.innerText = "Not found");
+};
+
+//switch case for return data
+
+const returnCase = (resObj: any) => {
+  console.log(`line 102: Entering Return case`);
+  console.log(`${Object.values(resObj)}`);
+  // let expErr:string;
+  if (resObj.latitude === "nil" || resObj.longitude === "nil") {
+    console.log(resObj.latitude);
+    returnedErrorReset("ipErr");
+  }
+  if (resObj.Error_Code == 2) {
+    console.log(`line 108: ${Object.keys(resObj)}`);
+    console.log(resObj.Error_Code);
+    returnedErrorReset("dnsErr");
+  }
+  myMap.updateLocation(resObj.latitude, resObj.longitude, 15);
+  updateResults(resObj);
 };
 
 //Generating default view
@@ -98,12 +140,14 @@ let myMap = generateMap();
 // Search form submit and lookup call
 searchForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  getCordinates().then((data:any)=>{
-    // console.log(`Lat: ${data.latitude} Lng: ${data.longitude}`)
-    myMap.updateLocation(data.latitude, data.longitude, 8);
-  })
-  const findCoordinates = async () => {
-    const result = await getCordinates();
-  };
-  findCoordinates();
+  getCordinates().then((data: any) => {
+    console.log(`line 132: what we get back from api ${Object.keys(data)}`);
+
+    returnCase(data);
+  });
+
+  //listen for input to remove error class
+  searchValue.addEventListener("input", (e) => {
+    searchValue.classList.remove("returned_error");
+  });
 });

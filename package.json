@@ -4,7 +4,6 @@
   "description": "![Design preview for the IP address tracker coding challenge](./design/desktop-preview.jpg)",
   "main": "server.js",
   "scripts": {
-    "start:dev": "nodemon ./dist/API/server.js",
     "start:type": "npx tsc --watch"
   },
   "repository": {
@@ -18,7 +17,7 @@
   },
   "homepage": "https://github.com/jake-mcadams/IP-SHare#readme",
   "devDependencies": {
-    "@types/leaflet": "^1.7.9",
+    "@types/leaflet": "^1.7.10",
     "leaflet": "^1.8.0",
     "typescript": "^4.6.4"
   },
